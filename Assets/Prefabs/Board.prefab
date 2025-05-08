@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2985386727223331464}
   - component: {fileID: 6194125135467175877}
+  - component: {fileID: 2895060886042633520}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -55,6 +56,19 @@ MonoBehaviour:
     _refTile: {fileID: 7681132283505194930}
     _tileHolder: {fileID: 8727982513694275143}
   _configs: {fileID: 11400000, guid: 664edf6829b7d4e459aa11e11c711e4b, type: 2}
+--- !u!114 &2895060886042633520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781349356451808291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83f2049facc248b28dc1542a76a821e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _boardController: {fileID: 6194125135467175877}
 --- !u!1 &2973275329329678165
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,8 +177,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4617266206910111684}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.7150059, y: -1.0422746, z: -0.13763626}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

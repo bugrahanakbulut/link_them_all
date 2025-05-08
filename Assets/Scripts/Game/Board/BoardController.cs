@@ -19,8 +19,10 @@ namespace LinkThemAll.Game.Board
         [SerializeField] private BoardTileConfigs _configs;
         
         private List<ETileType> _tiles;
+        private BoardTile[] _boardTiles;
         
         private Vector2Int _boardDimensions;
+        public Vector2Int Dimensions => _boardDimensions;
 
         public void InitializeBoard(Vector2Int dimensions, List<ETileType> tiles)
         {
@@ -35,12 +37,29 @@ namespace LinkThemAll.Game.Board
 
         public IServiceTask DrawTiles()
         {
-            return new DrawBoardTilesTask(_tiles.AsReadOnly(), _boardDimensions, _boardTilePool, _configs);
+            _boardTiles = new BoardTile[_boardDimensions.x * _boardDimensions.y];
+            return new DrawBoardTilesTask(_tiles.AsReadOnly(), _boardTiles, _boardDimensions, _boardTilePool, _configs);
         }
 
         public IServiceTask AdjustCamera()
         {
             return new AdjustCameraTask(_boardDimensions);
+        }
+
+        public BoardTile GetTileByIndex(int index)
+        {
+            if (_boardTiles == null || index < 0 || index >= _boardTiles.Length)
+            {
+                return null;
+            }
+
+            return _boardTiles[index];
+        }
+
+        public BoardTile GetTileByBoardPos(Vector2Int boardPos)
+        {
+            int index = BoardUtils.GetIndexByBoardPos(boardPos.x, boardPos.y, _boardDimensions);
+            return GetTileByIndex(index);
         }
         
         private void OnDestroy()

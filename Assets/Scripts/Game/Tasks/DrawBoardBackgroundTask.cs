@@ -23,7 +23,7 @@ namespace LinkThemAll.Game.Tasks
                 for (int x = 0; x < _boardDimensions.x; ++x)
                 {
                     GameObject tile = _pool.GetTile();
-                    tile.transform.position = BoardUtils.GetWorldPosByBoardPos(x, y);
+                    tile.transform.position = BoardUtils.BoardPosToWorldPos(x, y);
                 }
             }
             

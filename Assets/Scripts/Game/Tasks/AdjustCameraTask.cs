@@ -18,8 +18,8 @@ namespace LinkThemAll.Game.Tasks
 
         public UniTask Execute()
         {
-            Vector3 leftBottom = BoardUtils.GetWorldPosByBoardPos(0, 0);
-            Vector3 rightTop = BoardUtils.GetWorldPosByBoardPos(_boardDimensions.x - 1, _boardDimensions.y - 1);
+            Vector3 leftBottom = BoardUtils.BoardPosToWorldPos(0, 0);
+            Vector3 rightTop = BoardUtils.BoardPosToWorldPos(_boardDimensions.x - 1, _boardDimensions.y - 1);
 
             Vector3 center = (leftBottom + rightTop) * 0.5f;
 

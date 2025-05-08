@@ -13,13 +13,21 @@ namespace LinkThemAll.Game.Tasks
         private Vector2Int _boardDimensions;
         private readonly BoardTilePool _boardTilePool;
         private readonly BoardTileConfigs _configs;
-
-        public DrawBoardTilesTask(IReadOnlyList<ETileType> tiles, Vector2Int boardDimensions, BoardTilePool boardTilePool, BoardTileConfigs configs)
+        
+        private BoardTile[] _boardTiles;
+        
+        public DrawBoardTilesTask(
+            IReadOnlyList<ETileType> tiles,
+            BoardTile[] boardTiles,
+            Vector2Int boardDimensions,
+            BoardTilePool boardTilePool,
+            BoardTileConfigs configs)
         {
             _tiles = tiles;
             _boardDimensions = boardDimensions;
             _boardTilePool = boardTilePool;
             _configs = configs;
+            _boardTiles = boardTiles;
         }
 
         public UniTask Execute()
@@ -28,15 +36,16 @@ namespace LinkThemAll.Game.Tasks
             {
                 for (int x = 0; x < _boardDimensions.x; ++x)
                 {
-                    BoardTile tile = _boardTilePool.GetTile();
-                    ETileType tileType = _tiles[BoardUtils.GetIndexByBoardPos(x, y, _boardDimensions)];
+                    int index = BoardUtils.GetIndexByBoardPos(x, y, _boardDimensions);
                     
-                    tile.Initialize(
-                        tileType,
-                        _configs.GetTileSprite(tileType),
-                        new Vector2Int(x, y));
-                    tile.SetPosition(BoardUtils.GetWorldPosByBoardPos(x, y));
+                    BoardTile tile = _boardTilePool.GetTile();
+                    ETileType tileType = _tiles[index];
+                    
+                    tile.Initialize(tileType, _configs.GetTileSprite(tileType), new Vector2Int(x, y));
+                    tile.SetPosition(BoardUtils.BoardPosToWorldPos(x, y));
                     tile.SetActive(true);
+                    
+                    _boardTiles[index] = tile;
                 }
             }
             
