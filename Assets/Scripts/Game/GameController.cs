@@ -1,9 +1,9 @@
 using Cysharp.Threading.Tasks;
 using LinkThemAll.Game.Board;
+using LinkThemAll.Game.Level;
 using UnityEngine;
 using LinkThemAll.Game.Tasks;
 using LinkThemAll.Services.Task;
-using LinkThemAll.Services.Level;
 using UnityEngine.AddressableAssets;
 
 namespace LinkThemAll.Game

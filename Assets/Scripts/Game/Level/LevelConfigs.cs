@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace LinkThemAll.Services.Level
+namespace LinkThemAll.Game.Level
 {
     [Serializable]
     public struct LevelConfig

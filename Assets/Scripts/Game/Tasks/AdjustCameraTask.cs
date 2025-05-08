@@ -1,5 +1,7 @@
 using Cysharp.Threading.Tasks;
 using LinkThemAll.Game.Board;
+using LinkThemAll.Services;
+using LinkThemAll.Services.CameraService;
 using LinkThemAll.Services.Task;
 using UnityEngine;
 
@@ -21,7 +23,7 @@ namespace LinkThemAll.Game.Tasks
 
             Vector3 center = (leftBottom + rightTop) * 0.5f;
 
-            Camera mainCam = Camera.main;
+            Camera mainCam = ServiceProvider.Get<ICameraService>().MainCamera;
             mainCam.transform.position = new Vector3(center.x, center.y, -10);
 
             if (_boardDimensions.x > _boardDimensions.y)

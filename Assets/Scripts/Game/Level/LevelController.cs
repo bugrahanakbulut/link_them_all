@@ -1,10 +1,8 @@
 using System;
 using LinkThemAll.Game.Board;
-using LinkThemAll.Game.Tasks;
-using LinkThemAll.Services.Task;
 using UnityEngine;
 
-namespace LinkThemAll.Services.Level
+namespace LinkThemAll.Game.Level
 {
     public class LevelController : IDisposable
     {
