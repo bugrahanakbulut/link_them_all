@@ -1,8 +1,10 @@
-using LinkThemAll.Common.Tasks;
+using Cysharp.Threading.Tasks;
+using LinkThemAll.Game.Board;
 using UnityEngine;
 using LinkThemAll.Game.Tasks;
 using LinkThemAll.Services.Task;
 using LinkThemAll.Services.Level;
+using UnityEngine.AddressableAssets;
 
 namespace LinkThemAll.Game
 {
@@ -14,16 +16,21 @@ namespace LinkThemAll.Game
         
         private readonly TaskRunner _taskRunner = new TaskRunner();
         
+        private const string BOARD_PATH = "Board";
+
         public void Initialize()
         {
             _level = new LevelController(_levelConfigs);
         }
         
-        public void StartGame()
+        public async UniTaskVoid StartGame()
         {
-            _taskRunner.AddTask(new LoadBoardTask(_level));
+            await InitializeBoard();
+            
             _taskRunner.AddTask(new InitializeBoardTask(_level));
-            _taskRunner.AddTask(new ExecuteActionTask(DrawBoard));
+            _taskRunner.AddTask(_level.Board.DrawBoardBackgroundTask());
+            _taskRunner.AddTask(_level.Board.DrawTiles());
+            _taskRunner.AddTask(_level.Board.AdjustCamera());
         }
         
         private void OnDestroy()
@@ -31,11 +38,32 @@ namespace LinkThemAll.Game
             _taskRunner.Terminate();
         }
 
-        private void DrawBoard()
+        private async UniTask InitializeBoard()
         {
-            _taskRunner.AddTask(_level.Board.DrawBoardBackgroundTask());
-            _taskRunner.AddTask(_level.Board.DrawTiles());
-            _taskRunner.AddTask(_level.Board.AdjustCamera());
+            try
+            {
+                GameObject boardObject = await Addressables.InstantiateAsync(BOARD_PATH);
+
+                if (boardObject == null)
+                {
+                    Debug.LogError("Board Object could not be loaded!");
+                    return;
+                }
+            
+                BoardController board = boardObject.GetComponent<BoardController>();
+
+                if (board == null)
+                {
+                    Debug.LogError("Board Controller could not be found!");
+                    return;
+                }
+
+                _level.SetBoard(board);
+            }
+            catch
+            {
+                // ignore
+            }
         }
     }
 }

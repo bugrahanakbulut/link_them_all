@@ -9,7 +9,7 @@ namespace LinkThemAll.Game.Tasks
 {
     public class DrawBoardTilesTask : IServiceTask
     {
-        public IReadOnlyList<ETileType> _tiles;
+        private readonly IReadOnlyList<ETileType> _tiles;
         private Vector2Int _boardDimensions;
         private readonly BoardTilePool _boardTilePool;
         private readonly BoardTileConfigs _configs;

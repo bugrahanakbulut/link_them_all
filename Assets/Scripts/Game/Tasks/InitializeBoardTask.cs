@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using LinkThemAll.Game.Tile;
 using LinkThemAll.Services.Level;
@@ -22,11 +23,11 @@ namespace LinkThemAll.Game.Tasks
             Vector2Int boardDim = config.BoardSize;
             int boardSize = boardDim.x * boardDim.y;
 
-            ETileType[] tiles = new ETileType[boardSize];
+            List<ETileType> tiles = new List<ETileType>(boardSize);
 
             for (int i = 0; i < boardSize; ++i)
             {
-                tiles[i] = (ETileType) Random.Range(0, 3);
+                tiles.Add((ETileType)Random.Range(0, 3));
             }
             
             _levelController.Board.InitializeBoard(boardDim, tiles);

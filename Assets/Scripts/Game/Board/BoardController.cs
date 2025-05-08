@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using LinkThemAll.Game.Tile;
 using LinkThemAll.Game.Tasks;
@@ -17,11 +18,11 @@ namespace LinkThemAll.Game.Board
         [SerializeField] private BoardTilePool _boardTilePool;
         [SerializeField] private BoardTileConfigs _configs;
         
-        private ETileType[] _tiles;
+        private List<ETileType> _tiles;
         
         private Vector2Int _boardDimensions;
 
-        public void InitializeBoard(Vector2Int dimensions, ETileType[] tiles)
+        public void InitializeBoard(Vector2Int dimensions, List<ETileType> tiles)
         {
             _tiles = tiles;
             _boardDimensions = dimensions;
@@ -34,7 +35,7 @@ namespace LinkThemAll.Game.Board
 
         public IServiceTask DrawTiles()
         {
-            return new DrawBoardTilesTask(_tiles, _boardDimensions, _boardTilePool, _configs);
+            return new DrawBoardTilesTask(_tiles.AsReadOnly(), _boardDimensions, _boardTilePool, _configs);
         }
 
         public IServiceTask AdjustCamera()
