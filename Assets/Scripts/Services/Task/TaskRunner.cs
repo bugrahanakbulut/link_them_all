@@ -73,8 +73,9 @@ namespace LinkThemAll.Services.Task
                 {
                     await serviceTask.Execute().AttachExternalCancellation(_cts.Token);
                 }
-                catch (Exception e)
+                catch
                 {
+                    // 
                 }
             }
 

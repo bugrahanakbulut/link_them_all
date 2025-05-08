@@ -1,7 +1,5 @@
-using LinkThemAll.Game;
 using UnityEngine;
-using LinkThemAll.Services;
-using LinkThemAll.Services.Level;
+using LinkThemAll.Game;
 
 namespace LinkThemAll
 {
@@ -12,15 +10,8 @@ namespace LinkThemAll
         
         private void Awake()
         {
-            InitializeServices();
-            
+            _gameController.Initialize();
             _gameController.StartGame();
-        }
-
-        private void InitializeServices()
-        {
-            ServiceProvider.Add<ILevelService>(new LevelService());
-            ServiceProvider.Add(new GameService());
         }
     }
 }

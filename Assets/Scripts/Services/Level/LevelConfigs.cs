@@ -12,6 +12,7 @@ namespace LinkThemAll.Services.Level
         public Vector2Int BoardSize;
     }
     
+    [CreateAssetMenu(fileName = "LevelConfigs", menuName = "Configs/New Level Configs")]
     public class LevelConfigs : ScriptableObject
     {
         [SerializeField] private LevelConfig[] _levels;
