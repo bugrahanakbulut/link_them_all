@@ -38,7 +38,7 @@ namespace LinkThemAll.Game.Board
                 _tilePool.Release(_activeObjects[i]);
             }
             
-            _tilePool.Clear();
+            _activeObjects.Clear();
         }
 
         public void Dispose()

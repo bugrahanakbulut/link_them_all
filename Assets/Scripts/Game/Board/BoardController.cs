@@ -46,6 +46,7 @@ namespace LinkThemAll.Game.Board
         private void OnDestroy()
         {
             _bgTilePool.Dispose();
+            _boardTilePool.Dispose();
         }
     }
 }

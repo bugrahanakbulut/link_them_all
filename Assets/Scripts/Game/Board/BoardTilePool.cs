@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace LinkThemAll.Game.Board
 {
     [Serializable]
-    public class BoardTilePool
+    public class BoardTilePool : IDisposable
     {
         [SerializeField] private BoardTile _refTile;
         [SerializeField] private Transform _tileHolder;
@@ -23,7 +23,7 @@ namespace LinkThemAll.Game.Board
                 TileBoardTakenFromPool,
                 TileBoardReturnToPool);
         }
-        
+
         public BoardTile GetTile()
         {
             return _tilePool.Get();
@@ -38,6 +38,11 @@ namespace LinkThemAll.Game.Board
                 _tilePool.Release(_activeObjects[i]);
             }
             
+            _activeObjects.Clear();
+        }
+
+        public void Dispose()
+        {
             _tilePool.Clear();
         }
 
