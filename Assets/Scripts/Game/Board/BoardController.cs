@@ -87,7 +87,7 @@ namespace LinkThemAll.Game.Board
             IReadOnlyList<BoardTile> linkedTiles = LinkController.Link;
             
             _taskRunner.AddTask(new LinkTilesTask(this, linkedTiles, _boardTilePool));
-            _taskRunner.AddTask(new DropTilesTask(this, _boardTilePool, linkedTiles));
+            _taskRunner.AddTask(new DropTilesTask(this, _boardTilePool, _configs));
         }
 
         public void TileLinked(BoardTile tile)
@@ -119,6 +119,12 @@ namespace LinkThemAll.Game.Board
             {
                 t2.UpdateBoardPos(pos1);
             }
+        }
+
+        public void TileGenerated(BoardTile newTile, Vector2Int boardPos)
+        {
+            int index = BoardUtils.GetIndexByBoardPos(boardPos.x, boardPos.y, Dimensions);
+            _boardTiles[index] = newTile;
         }
 
         private void OnDestroy()

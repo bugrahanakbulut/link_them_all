@@ -42,6 +42,11 @@ namespace LinkThemAll.Game.Tile
             _boardPosition = newBoardPos;
         }
 
+        public Tween FadeIn(float duration)
+        {
+            return _spriteRenderer.DOFade(1, duration).From(0);
+        }
+
         public Tween FadeOut(float duration)
         {
             return _spriteRenderer.DOFade(0, duration);

@@ -59,6 +59,7 @@ namespace LinkThemAll.Game.Board
 
         private void TileBoardReturnToPool(BoardTile tile)
         {
+            tile.SetActive(false);
         }
     }
 }

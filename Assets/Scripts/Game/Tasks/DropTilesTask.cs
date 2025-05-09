@@ -12,15 +12,16 @@ namespace LinkThemAll.Game.Tasks
     {
         private readonly BoardController _boardController;
         private readonly BoardTilePool _boardTilePool;
-        private readonly IReadOnlyList<BoardTile> _linkedTiles;
-        
+        private readonly BoardTileConfigs _configs;
+
         private const float TILE_MOVE_DURATION = 0.18f;
+        private const float TILE_FADE_IN_DURATION = 0.18f;
         
-        public DropTilesTask(BoardController boardController, BoardTilePool boardTilePool, IReadOnlyList<BoardTile> linkedTiles)
+        public DropTilesTask(BoardController boardController, BoardTilePool boardTilePool, BoardTileConfigs configs)
         {
             _boardController = boardController;
             _boardTilePool = boardTilePool;
-            _linkedTiles = linkedTiles;
+            _configs = configs;
         }
 
         public async UniTask Execute()
@@ -46,6 +47,37 @@ namespace LinkThemAll.Game.Tasks
                     }
 
                     DropTile(tile, sequence);
+                }
+            }
+            
+            for (int y = 0; y < dimensions.y; ++y)
+            {
+                
+                for (int x = 0; x < dimensions.x; ++x)
+                {
+                    boardPos.x = x;
+                    boardPos.y = y;
+
+                    BoardTile tile = _boardController.GetTileByBoardPos(boardPos);
+
+                    if (tile != null)
+                    {
+                        continue;
+                    }
+
+                    ETileType tileType = (ETileType)Random.Range(0, 3);
+                    Vector2Int generatedTilePos = new Vector2Int(x, y);
+                    int dropAmount = _boardController.Dimensions.y + 1 - y;
+                    
+                    BoardTile newTile = _boardTilePool.GetTile();
+                    newTile.SetActive(true);
+                    newTile.Initialize(tileType, _configs.GetTileSprite(tileType), new Vector2Int(x, y));
+                    newTile.SetPosition(BoardUtils.BoardPosToWorldPos(generatedTilePos.x, _boardController.Dimensions.y + 1));
+
+                    sequence.Join(newTile.FadeIn(TILE_FADE_IN_DURATION));
+                    sequence.Join(newTile.MoveTo(BoardUtils.BoardPosToWorldPos(generatedTilePos.x, generatedTilePos.y), TILE_MOVE_DURATION * dropAmount).SetEase(Ease.OutCubic));
+                    
+                    _boardController.TileGenerated(newTile, generatedTilePos);
                 }
             }
 
