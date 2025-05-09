@@ -46,6 +46,8 @@ namespace LinkThemAll.Game.Board
             _tilePool.Clear();
         }
 
+        public void Release(BoardTile tile) => _tilePool.Release(tile);
+
         private BoardTile CreteNewTileBoard()
         {
             return GameObject.Instantiate(_refTile, _tileHolder);

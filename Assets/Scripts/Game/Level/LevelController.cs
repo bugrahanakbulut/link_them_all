@@ -44,5 +44,12 @@ namespace LinkThemAll.Game.Level
 
             _currentLevel = PlayerPrefs.GetInt(LEVEL_KEY);
         }
+
+        public void LoadCurrentLevel()
+        {
+            LevelConfig config = GetCurrentLevelConfig();
+
+            Board.Initialize(config);
+        }
     }
 }

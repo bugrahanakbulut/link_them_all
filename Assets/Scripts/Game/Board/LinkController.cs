@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using LinkThemAll.Game.Board;
 using LinkThemAll.Game.Tile;
 using LinkThemAll.Services;
 using LinkThemAll.Services.CameraService;
 using UnityEngine;
 
-namespace LinkThemAll.Game
+namespace LinkThemAll.Game.Board
 {
     public class LinkController : IDisposable
     {
@@ -15,6 +14,12 @@ namespace LinkThemAll.Game
         private readonly Camera _mainCamera;
         
         private readonly List<BoardTile> _link = new List<BoardTile>();
+        public IReadOnlyList<BoardTile> Link => _link.AsReadOnly();
+        
+        public Action OnLinkStarted { get; set; }
+        public Action OnLinkUpdated { get; set; }
+        public Action OnLinkTerminated { get; set; }
+        public Action OnLinkCompleted { get; set; }
 
         public LinkController(InputController inputController, BoardController boardController)
         {
@@ -55,16 +60,20 @@ namespace LinkThemAll.Game
             }
             
             _link.Add(tile);
+            OnLinkStarted?.Invoke();
         }
 
         private void OnFingerUp()
         {
             if (_link.Count < 3)
             {
+                OnLinkTerminated?.Invoke();
                 return;
             }
             
-            // link established
+            OnLinkCompleted?.Invoke();
+            
+            _link.Clear();
         }
 
         private void OnInputMove(Vector3 fingerPos)
@@ -99,12 +108,14 @@ namespace LinkThemAll.Game
             if (_link.Count > 1 && candidateTile == _link[^2])
             {
                 _link.RemoveAt(_link.Count - 1);
+                OnLinkUpdated?.Invoke();
                 return;
             }
 
             if (lastSelectedTile.TileType == candidateTile.TileType)
             {
                 _link.Add(candidateTile);
+                OnLinkUpdated?.Invoke();
             }
         }
         

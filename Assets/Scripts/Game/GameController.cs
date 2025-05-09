@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using LinkThemAll.Game.Board;
 using LinkThemAll.Game.Level;
 using UnityEngine;
-using LinkThemAll.Game.Tasks;
 using LinkThemAll.Services.Task;
 using UnityEngine.AddressableAssets;
 
@@ -26,11 +25,6 @@ namespace LinkThemAll.Game
         public async UniTaskVoid StartGame()
         {
             await LoadBoard();
-            
-            _taskRunner.AddTask(new InitializeBoardTask(_level));
-            _taskRunner.AddTask(_level.Board.DrawBoardBackgroundTask());
-            _taskRunner.AddTask(_level.Board.DrawTiles());
-            _taskRunner.AddTask(_level.Board.AdjustCamera());
         }
         
         private void OnDestroy()
@@ -59,6 +53,7 @@ namespace LinkThemAll.Game
                 }
 
                 _level.SetBoard(board);
+                _level.LoadCurrentLevel();
             }
             catch
             {

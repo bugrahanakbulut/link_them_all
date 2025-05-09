@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 namespace LinkThemAll.Game.Tile
@@ -18,6 +19,7 @@ namespace LinkThemAll.Game.Tile
         {
             _tile = tile;
             _spriteRenderer.sprite = sprite;
+            _spriteRenderer.color = Color.white;
             _boardPosition = boardPosition;
             
             #if UNITY_EDITOR
@@ -33,6 +35,21 @@ namespace LinkThemAll.Game.Tile
         public void SetActive(bool isActive)
         {
             _gameObject.SetActive(isActive);
+        }
+
+        public void UpdateBoardPos(Vector2Int newBoardPos)
+        {
+            _boardPosition = newBoardPos;
+        }
+
+        public Tween FadeOut(float duration)
+        {
+            return _spriteRenderer.DOFade(0, duration);
+        }
+
+        public Tween MoveTo(Vector3 position, float duration)
+        {
+            return _transform.DOMove(position, duration);
         }
     }
 }

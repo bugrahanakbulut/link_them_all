@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using LinkThemAll.Game.Board;
 using LinkThemAll.Game.Level;
 using LinkThemAll.Game.Tile;
 using LinkThemAll.Services.Task;
@@ -9,18 +10,22 @@ namespace LinkThemAll.Game.Tasks
 {
     public class InitializeBoardTask : IServiceTask
     {
-        private readonly LevelController _levelController;
+        private readonly BoardController _board;
+        private readonly LevelConfig _levelConfig;
 
-        public InitializeBoardTask(LevelController levelController)
+        public InitializeBoardTask(BoardController board, LevelConfig levelConfig)
         {
-            _levelController = levelController;
+            _board = board;
+            _levelConfig = levelConfig;
         }
 
         public UniTask Execute()
         {
-            LevelConfig config = _levelController.GetCurrentLevelConfig();
-
-            Vector2Int boardDim = config.BoardSize;
+            Vector2Int configBoardSize = _levelConfig.BoardSize;
+            Vector2Int boardDim = new Vector2Int(
+                Mathf.Max(configBoardSize.x, BoardConstants.MIN_BOARD_WIDTH), 
+                Mathf.Max(configBoardSize.y, BoardConstants.MIN_BOARD_HEIGHT));
+            
             int boardSize = boardDim.x * boardDim.y;
 
             List<ETileType> tiles = new List<ETileType>(boardSize);
@@ -30,7 +35,7 @@ namespace LinkThemAll.Game.Tasks
                 tiles.Add((ETileType)Random.Range(0, 3));
             }
             
-            _levelController.Board.InitializeBoard(boardDim, tiles);
+            _board.InitializeBoard(boardDim, tiles);
 
             return UniTask.CompletedTask;
         }
