@@ -111,6 +111,11 @@ namespace LinkThemAll.Game.Board
                 OnLinkUpdated?.Invoke();
                 return;
             }
+            
+            if (_link.Contains(candidateTile))
+            {
+                return;
+            }
 
             if (lastSelectedTile.TileType == candidateTile.TileType)
             {
