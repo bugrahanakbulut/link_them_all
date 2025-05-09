@@ -10,6 +10,7 @@ namespace LinkThemAll
     {
         [SerializeField] private GameController _gameController;
         [SerializeField] private CameraService _cameraService;
+        
         private void Awake()
         {
             ServiceProvider.Add<ICameraService>(_cameraService);

@@ -17,6 +17,7 @@ namespace LinkThemAll.Game.Board
         [SerializeField] private BackgroundPool _bgTilePool;
         [SerializeField] private BoardTilePool _boardTilePool;
         [SerializeField] private BoardTileConfigs _configs;
+        [SerializeField] private InputController _inputController;
         
         private List<ETileType> _tiles;
         private BoardTile[] _boardTiles;
@@ -24,10 +25,14 @@ namespace LinkThemAll.Game.Board
         private Vector2Int _boardDimensions;
         public Vector2Int Dimensions => _boardDimensions;
 
+        public LinkController LinkController {get; private set;}
+
         public void InitializeBoard(Vector2Int dimensions, List<ETileType> tiles)
         {
             _tiles = tiles;
             _boardDimensions = dimensions;
+
+            LinkController = new LinkController(_inputController, this);
         }
 
         public IServiceTask DrawBoardBackgroundTask()
@@ -66,6 +71,8 @@ namespace LinkThemAll.Game.Board
         {
             _bgTilePool.Dispose();
             _boardTilePool.Dispose();
+
+            LinkController = null;
         }
     }
 }

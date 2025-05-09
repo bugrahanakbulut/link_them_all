@@ -25,7 +25,7 @@ namespace LinkThemAll.Game
         
         public async UniTaskVoid StartGame()
         {
-            await InitializeBoard();
+            await LoadBoard();
             
             _taskRunner.AddTask(new InitializeBoardTask(_level));
             _taskRunner.AddTask(_level.Board.DrawBoardBackgroundTask());
@@ -38,7 +38,7 @@ namespace LinkThemAll.Game
             _taskRunner.Terminate();
         }
 
-        private async UniTask InitializeBoard()
+        private async UniTask LoadBoard()
         {
             try
             {
