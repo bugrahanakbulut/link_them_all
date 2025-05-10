@@ -129,7 +129,7 @@ namespace LinkThemAll.Game.Tasks
             sequence.Insert(0, newTile.FadeIn(TILE_FADE_IN_DURATION).SetDelay(delay));
             sequence.Insert(0, newTile.MoveTo(BoardUtils.BoardPosToWorldPos(generatedTilePos.x, generatedTilePos.y), TILE_MOVE_DURATION * dropAmount).SetEase(Ease.OutCubic).SetDelay(delay, false));
                     
-            _boardController.TileGenerated(newTile, generatedTilePos);
+            _boardController.AddTile(newTile, generatedTilePos);
         }
     }
 }

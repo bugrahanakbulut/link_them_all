@@ -4,9 +4,14 @@ namespace LinkThemAll.Game.Board
 {
     public static class BoardUtils
     {
-        public static int GetIndexByBoardPos(int x, int y, Vector2Int boardDimensions)
+        public static int BoardPosToIndex(int x, int y, Vector2Int boardDimensions)
         {
             return x + y * boardDimensions.x;
+        }
+        
+        public static Vector2Int IndexToBoardPos(int index, Vector2Int boardDimensions)
+        {
+            return new Vector2Int(index % boardDimensions.x, index / boardDimensions.x);
         }
 
         public static Vector3 BoardPosToWorldPos(int x, int y)
@@ -18,6 +23,7 @@ namespace LinkThemAll.Game.Board
         {
             int x = Mathf.FloorToInt((worldPos.x + BoardConstants.TILE_WIDTH * 0.5f) / BoardConstants.TILE_WIDTH);
             int y = Mathf.FloorToInt((worldPos.y + BoardConstants.TILE_HEIGHT * 0.5f) / BoardConstants.TILE_HEIGHT);
+            
             return new Vector2Int(x, y);
         }
     }

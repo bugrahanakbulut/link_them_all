@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -42,9 +43,9 @@ namespace LinkThemAll.Game.Tile
             _boardPosition = newBoardPos;
         }
 
-        public Tween FadeIn(float duration)
+        public Tweener FadeIn(float duration, float from = 0)
         {
-            return _spriteRenderer.DOFade(1, duration).From(0);
+            return _spriteRenderer.DOFade(1, duration).From(from);
         }
 
         public Tween FadeOut(float duration)
@@ -55,6 +56,11 @@ namespace LinkThemAll.Game.Tile
         public Tween MoveTo(Vector3 position, float duration)
         {
             return _transform.DOMove(position, duration);
+        }
+
+        private void OnDestroy()
+        {
+            DOTween.Kill(this);
         }
     }
 }

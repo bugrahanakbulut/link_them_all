@@ -36,7 +36,7 @@ namespace LinkThemAll.Game.Tasks
             {
                 for (int x = 0; x < _boardDimensions.x; ++x)
                 {
-                    int index = BoardUtils.GetIndexByBoardPos(x, y, _boardDimensions);
+                    int index = BoardUtils.BoardPosToIndex(x, y, _boardDimensions);
                     
                     BoardTile tile = _boardTilePool.GetTile();
                     ETileType tileType = _tiles[index];
