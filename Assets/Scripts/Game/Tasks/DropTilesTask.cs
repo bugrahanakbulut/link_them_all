@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using LinkThemAll.Game.Board;
@@ -49,9 +48,12 @@ namespace LinkThemAll.Game.Tasks
                     DropTile(tile, sequence);
                 }
             }
+
+            float delay = 0;
             
             for (int y = 0; y < dimensions.y; ++y)
             {
+                bool spawned = false;
                 
                 for (int x = 0; x < dimensions.x; ++x)
                 {
@@ -65,19 +67,14 @@ namespace LinkThemAll.Game.Tasks
                         continue;
                     }
 
-                    ETileType tileType = (ETileType)Random.Range(0, 3);
-                    Vector2Int generatedTilePos = new Vector2Int(x, y);
-                    int dropAmount = _boardController.Dimensions.y + 1 - y;
-                    
-                    BoardTile newTile = _boardTilePool.GetTile();
-                    newTile.SetActive(true);
-                    newTile.Initialize(tileType, _configs.GetTileSprite(tileType), new Vector2Int(x, y));
-                    newTile.SetPosition(BoardUtils.BoardPosToWorldPos(generatedTilePos.x, _boardController.Dimensions.y + 1));
+                    GenerateTileAt(x, y, sequence, delay);
 
-                    sequence.Join(newTile.FadeIn(TILE_FADE_IN_DURATION));
-                    sequence.Join(newTile.MoveTo(BoardUtils.BoardPosToWorldPos(generatedTilePos.x, generatedTilePos.y), TILE_MOVE_DURATION * dropAmount).SetEase(Ease.OutCubic));
-                    
-                    _boardController.TileGenerated(newTile, generatedTilePos);
+                    spawned = true;
+                }
+
+                if (spawned)
+                {
+                    delay += TILE_MOVE_DURATION;
                 }
             }
 
@@ -116,6 +113,23 @@ namespace LinkThemAll.Game.Tasks
             _boardController.SwapTiles(boardPos, dropPos);
 
             sequence.Join(tile.MoveTo(BoardUtils.BoardPosToWorldPos(dropPos.x, dropPos.y), TILE_MOVE_DURATION * dropCount).SetEase(Ease.OutCubic));
+        }
+
+        private void GenerateTileAt(int x, int y, Sequence sequence, float delay)
+        {
+            ETileType tileType = (ETileType)Random.Range(0, 3);
+            Vector2Int generatedTilePos = new Vector2Int(x, y);
+            int dropAmount = _boardController.Dimensions.y + 1 - y;
+                    
+            BoardTile newTile = _boardTilePool.GetTile();
+            newTile.SetActive(true);
+            newTile.Initialize(tileType, _configs.GetTileSprite(tileType), new Vector2Int(x, y));
+            newTile.SetPosition(BoardUtils.BoardPosToWorldPos(generatedTilePos.x, _boardController.Dimensions.y + 1));
+                    
+            sequence.Insert(0, newTile.FadeIn(TILE_FADE_IN_DURATION).SetDelay(delay));
+            sequence.Insert(0, newTile.MoveTo(BoardUtils.BoardPosToWorldPos(generatedTilePos.x, generatedTilePos.y), TILE_MOVE_DURATION * dropAmount).SetEase(Ease.OutCubic).SetDelay(delay, false));
+                    
+            _boardController.TileGenerated(newTile, generatedTilePos);
         }
     }
 }
