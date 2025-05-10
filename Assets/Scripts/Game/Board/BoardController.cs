@@ -50,6 +50,8 @@ namespace LinkThemAll.Game.Board
             _taskRunner.AddTask(new DrawBoardBackgroundTask(_boardDimensions, _bgTilePool));
             _taskRunner.AddTask(new DrawBoardTilesTask(_tiles.AsReadOnly(), _boardTiles, _boardDimensions, _boardTilePool, _configs));
             _taskRunner.AddTask(new AdjustCameraTask(_boardDimensions));
+            _taskRunner.AddTask(new ValidateBoardTask(this));
+            _taskRunner.AddTask(new ShuffleBoardTask(this));
         }
         
         public void InitializeBoard(Vector2Int dimensions, List<ETileType> tiles)

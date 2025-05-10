@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace LinkThemAll.Services.Task
 {
@@ -73,9 +74,9 @@ namespace LinkThemAll.Services.Task
                 {
                     await serviceTask.Execute().AttachExternalCancellation(_cts.Token);
                 }
-                catch
+                catch (Exception e)
                 {
-                    // 
+                    Debug.LogError($"{e.Message}\n  {e.StackTrace}");
                 }
             }
 

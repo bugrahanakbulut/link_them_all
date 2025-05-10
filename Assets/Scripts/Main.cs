@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 using LinkThemAll.Game;
 using LinkThemAll.Services;
 using LinkThemAll.Services.CameraService;
+using Random = UnityEngine.Random;
 
 namespace LinkThemAll
 {
@@ -13,6 +15,8 @@ namespace LinkThemAll
         
         private void Awake()
         {
+            Random.InitState(DateTime.Now.Second);
+            
             ServiceProvider.Add<ICameraService>(_cameraService);
             
             _gameController.Initialize();

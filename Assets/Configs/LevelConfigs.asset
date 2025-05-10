@@ -16,7 +16,7 @@ MonoBehaviour:
   - LevelId: 0
     TargetMove: 5
     TargetScore: 15
-    BoardSize: {x: 8, y: 8}
+    BoardSize: {x: 3, y: 3}
   - LevelId: 1
     TargetMove: 0
     TargetScore: 0
