@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Game
   m_GUID: f1f13520730226546b545e01f87e7eb7
   m_SerializeEntries:
+  - m_GUID: 9f440d326a3200349a959742372c64f0
+    m_Address: Assets/Art/TextureAtlasses/Game.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Board
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f4508ac68bc53e348a5900b80eb66c77
     m_Address: Board
     m_ReadOnly: 0
