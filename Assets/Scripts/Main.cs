@@ -18,6 +18,7 @@ namespace LinkThemAll
             Random.InitState(DateTime.Now.Second);
             
             ServiceProvider.Add<ICameraService>(_cameraService);
+            ServiceProvider.Add<IScoreService>(new ScoreService());
             
             _gameController.Initialize();
             _gameController.StartGame();

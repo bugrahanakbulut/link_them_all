@@ -1,64 +1,44 @@
-using Cysharp.Threading.Tasks;
-using LinkThemAll.Game.Board;
-using LinkThemAll.Game.Level;
 using UnityEngine;
+using LinkThemAll.Game.Level;
+using LinkThemAll.Game.Tasks;
+using Cysharp.Threading.Tasks;
+using LinkThemAll.Common.Tasks;
+using LinkThemAll.Services;
 using LinkThemAll.Services.Task;
-using UnityEngine.AddressableAssets;
+using LinkThemAll.UI;
+using UnityEngine.Serialization;
 
 namespace LinkThemAll.Game
 {
     public class GameController : MonoBehaviour
     {
         [SerializeField] private LevelConfigs _levelConfigs;
-
+        [SerializeField] private ViewManager _viewManager;
+        
         private LevelController _level;
         
         private readonly TaskRunner _taskRunner = new TaskRunner();
         
-        private const string BOARD_PATH = "Board";
-
         public void Initialize()
         {
             _level = new LevelController(_levelConfigs);
+            
+            ServiceProvider.Add<ILevelService>(_level);
         }
         
         public async UniTaskVoid StartGame()
         {
-            await LoadBoard();
+            _taskRunner.AddTask(new LoadGameTask(_level));
+            _taskRunner.AddTask(new ExecuteActionTask(() =>
+            {
+                _viewManager.LoadView(ViewConstants.InGameView).Forget();
+            }));
         }
         
         private void OnDestroy()
         {
+            _level.Dispose();
             _taskRunner.Terminate();
-        }
-
-        private async UniTask LoadBoard()
-        {
-            try
-            {
-                GameObject boardObject = await Addressables.InstantiateAsync(BOARD_PATH);
-
-                if (boardObject == null)
-                {
-                    Debug.LogError("Board Object could not be loaded!");
-                    return;
-                }
-            
-                BoardController board = boardObject.GetComponent<BoardController>();
-
-                if (board == null)
-                {
-                    Debug.LogError("Board Controller could not be found!");
-                    return;
-                }
-
-                _level.SetBoard(board);
-                _level.LoadCurrentLevel();
-            }
-            catch
-            {
-                // ignore
-            }
         }
     }
 }
