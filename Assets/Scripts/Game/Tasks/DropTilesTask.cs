@@ -1,9 +1,11 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using LinkThemAll.Game.Board;
 using LinkThemAll.Game.Tile;
 using LinkThemAll.Services.Task;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace LinkThemAll.Game.Tasks
 {
@@ -25,6 +27,11 @@ namespace LinkThemAll.Game.Tasks
 
         public async UniTask Execute()
         {
+            if (_boardController.Freezed)
+            {
+                return;
+            } 
+            
             Vector2Int boardPos = Vector2Int.zero;
             Vector2Int dimensions = _boardController.Dimensions;
 

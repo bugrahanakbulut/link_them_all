@@ -7,11 +7,11 @@ using UnityEngine.UI;
 
 namespace LinkThemAll.UI
 {
-    public class LevelFailedView : ViewBase
+    public class LevelCompletedView : ViewBase
     {
-        [SerializeField] private Button _tryAgainButton;
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private GameObject _gameObject;
+        [SerializeField] private Button _continueButton;
 
         public override UniTask Show()
         {
@@ -27,15 +27,15 @@ namespace LinkThemAll.UI
 
         private void OnEnable()
         {
-            _tryAgainButton.onClick.AddListener(OnClickedTryAgain);
+            _continueButton.onClick.AddListener(OnClickedContinue);
         }
 
         private void OnDisable()
         {
-            _tryAgainButton.onClick.RemoveListener(OnClickedTryAgain);
+            _continueButton.onClick.RemoveListener(OnClickedContinue);
         }
 
-        private void OnClickedTryAgain()
+        private void OnClickedContinue()
         {
             ServiceProvider.Get<IGameService>().StartGame();
         }

@@ -8,12 +8,8 @@ namespace LinkThemAll.Game.Level
 {
     public interface ILevelService : IService
     {
-        int RemainingMoveCount { get; }
-
         int GetCurrentLevel();
         int GetLevelTargetScore();
-        
-        Action OnMoveCountUpdated { get; set; }
     }
 
     public interface IMoveService : IService
@@ -42,18 +38,14 @@ namespace LinkThemAll.Game.Level
         public LevelController(LevelConfigs levelConfigs)
         {
             _levelConfigs = levelConfigs;
-            
-            LoadPlayerLevel();
-
-            _currentLevelConfig = GetCurrentLevelConfig();
-            RemainingMoveCount = _currentLevelConfig.TargetMove;
         }
         
         public void LoadCurrentLevel()
         {
-            LevelConfig config = GetCurrentLevelConfig();
-
-            Board.Initialize(config);
+            LoadPlayerLevel();
+            _currentLevelConfig = GetCurrentLevelConfig();
+            RemainingMoveCount = _currentLevelConfig.TargetMove;
+            Board.Initialize(_currentLevelConfig);
         }
 
         public void SetBoard(BoardController board)
@@ -107,7 +99,13 @@ namespace LinkThemAll.Game.Level
 
             if (_scoreService.CurrentScore >= GetLevelTargetScore())
             {
-                OnLevelCompleted?.Invoke();
+                _currentLevel++;
+                SaveLevel();
+                
+                Board.WaitForBoardFreed(() =>
+                {
+                    OnLevelCompleted?.Invoke();
+                });
                 return;
             }
         }
@@ -128,13 +126,28 @@ namespace LinkThemAll.Game.Level
             _currentLevel = PlayerPrefs.GetInt(LEVEL_KEY);
         }
 
+        private void SaveLevel()
+        {
+            PlayerPrefs.SetInt(LEVEL_KEY, _currentLevel);
+        }
+
         public void LockBoard()
         {
             Board.Lock();
         }
 
+        public void FreezeBoard()
+        {
+            Board.Freeze();
+        }
+
         public void Reset()
         {
+            if (Board != null)
+            {
+                Board.OnTilesLinked -= OnTileLinked;
+            }
+            
             _scoreService.Reset();
             RemainingMoveCount = 0;
         }

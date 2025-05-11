@@ -18,6 +18,11 @@ namespace LinkThemAll.Game.Tasks
 
         public UniTask Execute()
         {
+            if (_boardController.Freezed)
+            {
+                return UniTask.CompletedTask;
+            } 
+            
             NativeArray<bool> linkResult = new NativeArray<bool>(1, Allocator.Persistent);
             
             LinkFinder linkFinder = new LinkFinder(_boardController.Dimensions, _boardController.BoardTiles,  linkResult);

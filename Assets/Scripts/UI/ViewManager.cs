@@ -10,6 +10,7 @@ namespace LinkThemAll.UI
     {
         public static readonly string InGameView = "InGameView";
         public static readonly string LevelFailedView = "LevelFailedView";
+        public static readonly string LevelCompletedView = "LevelCompletedView";
     }
     
     public class ViewManager : MonoBehaviour

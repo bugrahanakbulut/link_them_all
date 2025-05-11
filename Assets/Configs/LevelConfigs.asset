@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levels:
   - LevelId: 0
-    TargetMove: 1
-    TargetScore: 15
-    BoardSize: {x: 8, y: 8}
+    TargetMove: 5
+    TargetScore: 9
+    BoardSize: {x: 4, y: 3}
   - LevelId: 1
-    TargetMove: 0
-    TargetScore: 0
-    BoardSize: {x: 8, y: 8}
+    TargetMove: 5
+    TargetScore: 12
+    BoardSize: {x: 5, y: 5}
   - LevelId: 2
-    TargetMove: 0
-    TargetScore: 0
-    BoardSize: {x: 8, y: 8}
+    TargetMove: 6
+    TargetScore: 15
+    BoardSize: {x: 6, y: 6}

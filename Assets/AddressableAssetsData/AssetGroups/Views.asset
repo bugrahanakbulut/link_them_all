@@ -15,10 +15,17 @@ MonoBehaviour:
   m_GroupName: Views
   m_GUID: 8f23a4c0844cfaa4790c91cef1ac7c86
   m_SerializeEntries:
+  - m_GUID: 329d64b529373be4aaf1c262e09c1dd0
+    m_Address: Assets/Prefabs/Views/LevelCompletedView.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelCompletedView
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 46c08ff59146a7940a78c0dc4e1ea1a4
     m_Address: Assets/Art/TextureAtlasses/LevelFailedView.spriteatlasv2
     m_ReadOnly: 0
     m_SerializedLabels:
+    - LevelCompletedView
     - LevelFailedView
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 96ce92affdd4a2e48b818afb1b48c567

@@ -35,6 +35,8 @@ namespace LinkThemAll.Game.Board
         
         private Vector2Int _boardDimensions;
         public Vector2Int Dimensions => _boardDimensions;
+        
+        public bool Freezed { get; private set; }
 
         public LinkController LinkController { get; private set; }
         public bool NeedToShuffle { get; private set; }
@@ -87,6 +89,14 @@ namespace LinkThemAll.Game.Board
             int index = BoardUtils.BoardPosToIndex(boardPos.x, boardPos.y, _boardDimensions);
             return GetTileByIndex(index);
         }
+
+        public void WaitForBoardFreed(Action action)
+        {
+            _taskRunner.AddTask(new ExecuteActionTask(() =>
+            {
+                action?.Invoke();
+            }));
+        }
         
         private void OnLinkCompleted()
         {
@@ -99,6 +109,11 @@ namespace LinkThemAll.Game.Board
             _taskRunner.AddTask(new ShuffleBoardTask(this));
             _taskRunner.AddTask(new ExecuteActionTask(() =>
             {
+                if (Freezed)
+                {
+                    return;
+                }
+                
                 _inputController.Unlock();
             }));
         }
@@ -170,9 +185,9 @@ namespace LinkThemAll.Game.Board
             _inputController.Lock();
         }
 
-        public void Unlock()
+        public void Freeze()
         {
-            _inputController.Unlock();
+            Freezed = true;
         }
 
         private void OnDestroy()

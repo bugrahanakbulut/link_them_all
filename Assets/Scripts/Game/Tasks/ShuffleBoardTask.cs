@@ -29,12 +29,11 @@ namespace LinkThemAll.Game.Tasks
 
         public UniTask Execute()
         {
-            if (!_boardController.NeedToShuffle)
+            if (!_boardController.NeedToShuffle || _boardController.Freezed)
             {
                 return UniTask.CompletedTask;
             }
 
-            
             List<BoardTile> currentTiles = new List<BoardTile>(_boardController.BoardTiles);
             
             int tileCount = currentTiles.Count;

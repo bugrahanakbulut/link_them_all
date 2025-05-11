@@ -104,6 +104,7 @@ MonoBehaviour:
     - Board
     - InGameView
     - LevelFailedView
+    - LevelCompletedView
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 127918330e761a74eab0a00cb992228f, type: 2}

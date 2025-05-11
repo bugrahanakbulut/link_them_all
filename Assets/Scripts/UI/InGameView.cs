@@ -28,12 +28,12 @@ namespace LinkThemAll.UI
         public override UniTask Show()
         {
             _gameObject.SetActive(true);
-            return _canvasGroup.DOFade(1, 1).From(0).SetId(this).ToUniTask();
+            return _canvasGroup.DOFade(1, 0.5f).From(0).SetId(this).ToUniTask();
         }
 
         public override async UniTask Hide()
         {
-            await _canvasGroup.DOFade(0, 1f).SetId(this).ToUniTask();
+            await _canvasGroup.DOFade(0, 0.5f).SetId(this).ToUniTask();
             _gameObject.SetActive(false);
         }
 

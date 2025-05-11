@@ -72,11 +72,20 @@ namespace LinkThemAll.Services.Task
 
                 try
                 {
-                    await serviceTask.Execute().AttachExternalCancellation(_cts.Token);
+                    Debug.Log($"[TaskRunner]::Task Started {serviceTask.GetType()} @{Time.frameCount}");
+                    
+                    await serviceTask.Execute().AttachExternalCancellation(_cts.Token).SuppressCancellationThrow();
+                    
+                    Debug.Log($"[TaskRunner]::Task Completed {serviceTask.GetType()} @{Time.frameCount}");
                 }
                 catch (Exception e)
                 {
                     Debug.LogError($"{e.Message}\n  {e.StackTrace}");
+
+                    if (_cts.IsCancellationRequested)
+                    {
+                        return;
+                    }
                 }
             }
 
