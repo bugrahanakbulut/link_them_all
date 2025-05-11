@@ -15,6 +15,8 @@ namespace LinkThemAll.UI
         [SerializeField] private TextMeshProUGUI _levelText;
         [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private TextMeshProUGUI _moveText;
+        [SerializeField] private TextMeshProUGUI _fpstracker;
+        
         
         [SerializeField] private CanvasGroup _canvasGroup;
 
@@ -36,6 +38,11 @@ namespace LinkThemAll.UI
         {
             await _canvasGroup.DOFade(0, 0.5f).SetId(this).ToUniTask();
             _gameObject.SetActive(false);
+        }
+
+        private void Update()
+        {
+            _fpstracker.SetText($"{1 / Time.deltaTime}");
         }
 
         private void OnEnable()

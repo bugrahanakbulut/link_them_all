@@ -16,6 +16,7 @@ namespace LinkThemAll
         private void Awake()
         {
             Random.InitState(DateTime.Now.Second);
+            Application.targetFrameRate = 60;
             
             ServiceProvider.Add<ICameraService>(_cameraService);
             ServiceProvider.Add<IScoreService>(new ScoreService());

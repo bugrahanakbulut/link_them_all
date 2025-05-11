@@ -1,4 +1,3 @@
-using System.IO;
 using Cysharp.Threading.Tasks;
 using LinkThemAll.Game.Board;
 using LinkThemAll.Game.Level;
@@ -13,7 +12,7 @@ namespace LinkThemAll.Game.Tasks
         private readonly LevelController _level;
         
         private const string BOARD_PATH = "Board";
-        private const string LEVEL_FILE_NAME_TEMPLATE = "level_{0}.json";
+        private const string LEVEL_FILE_NAME_TEMPLATE = "level_{0}";
         
         private static readonly LevelConfig _defaultConfig = new LevelConfig(0, 7, 25, new Vector2Int(8, 8));
 
@@ -54,31 +53,30 @@ namespace LinkThemAll.Game.Tasks
 
         private LevelConfig LoadLevelConfig(int levelId)
         {
-            string folderPath = Path.Combine(Application.dataPath, "Resources/Levels");
+            Object[] texts = Resources.LoadAll("Levels");
             
-            if (!Directory.Exists(folderPath))
-            {
-                Debug.LogError("Could not found level folder!");
-                return _defaultConfig;
-            }
-
-            string[] res = Directory.GetFiles(folderPath, "*.json");
-            
-            int levelCount = res.Length;
+            int levelCount = texts.Length;
 
             if (levelCount == 0)
             {
-                Debug.LogError("No defined level!");
-                return _defaultConfig;
+               Debug.LogError("No defined level!");
+               return _defaultConfig;
             }
 
             int loadingLevel = levelId % levelCount;
 
             string levelFileName = string.Format(LEVEL_FILE_NAME_TEMPLATE, loadingLevel);
 
-            string json = File.ReadAllText(Path.Combine(folderPath, levelFileName));
-            
-            return JsonUtility.FromJson<LevelConfig>(json);
+            foreach (Object o in texts)
+            {
+                if (o.name == levelFileName)
+                {
+                    TextAsset textAsset = (TextAsset) o;
+                    return JsonUtility.FromJson<LevelConfig>(textAsset.text);
+                }
+            }
+
+            return _defaultConfig;
         }
     }
 }
