@@ -11,7 +11,7 @@ namespace LinkThemAll.Game.Tasks
     {
         private readonly Vector2Int _boardDimensions;
 
-        private const float CameraVerticalPositionOffset = 2;
+        private const float WIDTH_OFFSET = 1.1f;
 
         public AdjustCameraTask(Vector2Int boardDimensions)
         {
@@ -26,16 +26,19 @@ namespace LinkThemAll.Game.Tasks
             Vector3 center = (leftBottom + rightTop) * 0.5f;
 
             Camera mainCam = ServiceProvider.Get<ICameraService>().MainCamera;
-            mainCam.transform.position = new Vector3(center.x, center.y + CameraVerticalPositionOffset, -10);
+            Vector3 camPos = new Vector3(center.x, center.y, -10);
 
-            if (_boardDimensions.x > _boardDimensions.y)
-            {
-                mainCam.orthographicSize = _boardDimensions.x * BoardConstants.TILE_WIDTH;
-            }
-            else
-            {
-                mainCam.orthographicSize = _boardDimensions.y * BoardConstants.TILE_HEIGHT;
-            }
+            float screenAspectRation = (float)Screen.height / Screen.width;
+            
+            float boardWidth = (_boardDimensions.x * BoardConstants.TILE_WIDTH) * WIDTH_OFFSET;
+            float boardHeight = _boardDimensions.y * BoardConstants.TILE_HEIGHT;
+
+            float sizeForHeight = boardHeight * 0.75f;
+            float sizeForWidth = boardWidth * screenAspectRation * 0.5f;
+            
+            mainCam.orthographicSize = Mathf.Max(sizeForHeight, sizeForWidth);
+
+            mainCam.transform.position = camPos;
             
             return UniTask.CompletedTask;
         }
