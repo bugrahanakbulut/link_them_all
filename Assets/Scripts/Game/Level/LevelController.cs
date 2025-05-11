@@ -40,12 +40,7 @@ namespace LinkThemAll.Game.Level
 
             return _currentLevel;
         }
-
-        public void SetBoard(BoardController board)
-        {
-            Board = board;
-            Board.OnTilesLinked += OnTileLinked;
-        }
+        
         public int GetCurrentLevel()
         {
             return _currentLevel;
@@ -92,12 +87,15 @@ namespace LinkThemAll.Game.Level
             RemainingMoveCount = 0;
         }
 
-        public void InitializeLevel(LevelConfig config)
+        public void InitializeLevel(BoardController board, LevelConfig config)
         {
             _currentLevelConfig = config;
             
             RemainingMoveCount = config.TargetMove;
+            
+            Board = board;
             Board.Initialize(_currentLevelConfig);
+            Board.OnTilesLinked += OnTileLinked;
         }
 
         private void OnTileLinked(int linkLength, ETileType tileType)

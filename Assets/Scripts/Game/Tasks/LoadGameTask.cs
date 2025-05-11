@@ -42,11 +42,9 @@ namespace LinkThemAll.Game.Tasks
                     return;
                 }
                 
-                _level.SetBoard(board);
-
                 LevelConfig config = LoadLevelConfig(_level.LoadCurrentLevel());
 
-                _level.InitializeLevel(config);
+                _level.InitializeLevel(board, config);
             }
             catch
             {
