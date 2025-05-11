@@ -10,28 +10,13 @@ namespace LinkThemAll.Game.Level
         public int TargetMove;
         public int TargetScore;
         public Vector2Int BoardSize;
-    }
-    
-    [CreateAssetMenu(fileName = "LevelConfigs", menuName = "Configs/New Level Configs")]
-    public class LevelConfigs : ScriptableObject
-    {
-        [SerializeField] private LevelConfig[] _levels;
 
-        public LevelConfig TryGetLevelConfig(int id)
+        public LevelConfig(int levelId, int targetMove, int targetScore, Vector2Int boardSize)
         {
-            int definedLevelCount = _levels.Length;
-
-            if (id < 0)
-            {
-                id = 0;
-            }
-            
-            if (id >= definedLevelCount)
-            {
-                id = id % definedLevelCount;
-            }
-
-            return _levels[id];
+            LevelId = levelId;
+            TargetMove = targetMove;
+            TargetScore = targetScore;
+            BoardSize = boardSize;
         }
     }
 }

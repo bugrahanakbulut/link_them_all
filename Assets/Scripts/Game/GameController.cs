@@ -17,7 +17,6 @@ namespace LinkThemAll.Game
     
     public class GameController : MonoBehaviour, IGameService
     {
-        [SerializeField] private LevelConfigs _levelConfigs;
         [SerializeField] private ViewManager _viewManager;
         
         private LevelController _level;
@@ -38,7 +37,7 @@ namespace LinkThemAll.Game
 
         public void Initialize()
         {
-            _level = new LevelController(_levelConfigs);
+            _level = new LevelController();
             
             ServiceProvider.Add<ILevelService>(_level);
             ServiceProvider.Add<IMoveService>(_level);

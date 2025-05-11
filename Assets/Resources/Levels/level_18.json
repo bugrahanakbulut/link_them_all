@@ -1,0 +1,9 @@
+{
+    "LevelId": 18,
+    "TargetMove": 39,
+    "TargetScore": 135,
+    "BoardSize": {
+        "x": 8,
+        "y": 8
+    }
+}

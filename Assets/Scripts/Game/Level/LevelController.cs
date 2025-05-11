@@ -26,7 +26,6 @@ namespace LinkThemAll.Game.Level
         private int _currentLevel;
         private LevelConfig _currentLevelConfig;
         
-        private readonly LevelConfigs _levelConfigs;
         private readonly IScoreService _scoreService = ServiceProvider.Get<IScoreService>();
         
         private const string LEVEL_KEY = "player_cur_level";
@@ -35,17 +34,11 @@ namespace LinkThemAll.Game.Level
         public Action OnLevelCompleted { get; set; }
         public Action OnLevelFailed { get; set; }
         
-        public LevelController(LevelConfigs levelConfigs)
-        {
-            _levelConfigs = levelConfigs;
-        }
-        
-        public void LoadCurrentLevel()
+        public int LoadCurrentLevel()
         {
             LoadPlayerLevel();
-            _currentLevelConfig = GetCurrentLevelConfig();
-            RemainingMoveCount = _currentLevelConfig.TargetMove;
-            Board.Initialize(_currentLevelConfig);
+
+            return _currentLevel;
         }
 
         public void SetBoard(BoardController board)
@@ -76,6 +69,35 @@ namespace LinkThemAll.Game.Level
 
             Board.OnTilesLinked -= OnTileLinked;
             Board = null;
+        }
+
+        public void LockBoard()
+        {
+            Board.Lock();
+        }
+
+        public void FreezeBoard()
+        {
+            Board.Freeze();
+        }
+
+        public void Reset()
+        {
+            if (Board != null)
+            {
+                Board.OnTilesLinked -= OnTileLinked;
+            }
+            
+            _scoreService.Reset();
+            RemainingMoveCount = 0;
+        }
+
+        public void InitializeLevel(LevelConfig config)
+        {
+            _currentLevelConfig = config;
+            
+            RemainingMoveCount = config.TargetMove;
+            Board.Initialize(_currentLevelConfig);
         }
 
         private void OnTileLinked(int linkLength, ETileType tileType)
@@ -110,11 +132,6 @@ namespace LinkThemAll.Game.Level
             }
         }
 
-        private LevelConfig GetCurrentLevelConfig()
-        {
-            return _levelConfigs.TryGetLevelConfig(_currentLevel);
-        }
-
         private void LoadPlayerLevel()
         {
             if (!PlayerPrefs.HasKey(LEVEL_KEY))
@@ -129,27 +146,6 @@ namespace LinkThemAll.Game.Level
         private void SaveLevel()
         {
             PlayerPrefs.SetInt(LEVEL_KEY, _currentLevel);
-        }
-
-        public void LockBoard()
-        {
-            Board.Lock();
-        }
-
-        public void FreezeBoard()
-        {
-            Board.Freeze();
-        }
-
-        public void Reset()
-        {
-            if (Board != null)
-            {
-                Board.OnTilesLinked -= OnTileLinked;
-            }
-            
-            _scoreService.Reset();
-            RemainingMoveCount = 0;
         }
     }
 }
