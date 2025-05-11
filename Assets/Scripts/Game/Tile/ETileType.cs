@@ -6,6 +6,7 @@ namespace LinkThemAll.Game.Tile
         Tile_1 = 0,
         Tile_2 = 1,
         Tile_3 = 2,
-        Tile_4 = 3
+        Tile_4 = 3,
+        Tile_Count = 4,
     }
 }

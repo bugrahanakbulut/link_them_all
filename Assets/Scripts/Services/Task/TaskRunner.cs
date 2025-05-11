@@ -72,11 +72,7 @@ namespace LinkThemAll.Services.Task
 
                 try
                 {
-                    Debug.Log($"[TaskRunner]::Task Started {serviceTask.GetType()} @{Time.frameCount}");
-                    
                     await serviceTask.Execute().AttachExternalCancellation(_cts.Token).SuppressCancellationThrow();
-                    
-                    Debug.Log($"[TaskRunner]::Task Completed {serviceTask.GetType()} @{Time.frameCount}");
                 }
                 catch (Exception e)
                 {

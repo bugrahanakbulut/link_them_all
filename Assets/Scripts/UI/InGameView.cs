@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -64,7 +65,7 @@ namespace LinkThemAll.UI
         private void OnScoreUpdated()
         {
             int levelScoreTarget = _levelService.GetLevelTargetScore();
-            _scoreText.SetText(string.Format(ScoreTemplate, _scoreService.CurrentScore, levelScoreTarget));
+            _scoreText.SetText(string.Format(ScoreTemplate, Math.Min(levelScoreTarget, _scoreService.CurrentScore), levelScoreTarget));
         }
     }
 }

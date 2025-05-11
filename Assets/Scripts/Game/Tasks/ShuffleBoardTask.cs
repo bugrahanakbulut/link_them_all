@@ -86,13 +86,9 @@ namespace LinkThemAll.Game.Tasks
 
                 ETileType tileType = tile.TileType;
                 
-                if (counts.ContainsKey(tileType))
+                if (!counts.TryAdd(tileType, 1))
                 {
                     counts[tileType]++;
-                }
-                else
-                {
-                    counts.Add(tileType, 1);
                 }
             }
 

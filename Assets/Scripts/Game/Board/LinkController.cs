@@ -65,7 +65,7 @@ namespace LinkThemAll.Game.Board
 
         private void OnFingerUp()
         {
-            if (_link.Count < 3)
+            if (_link.Count < BoardConstants.MIN_LINK_LENGTH)
             {
                 OnLinkTerminated?.Invoke();
                 return;

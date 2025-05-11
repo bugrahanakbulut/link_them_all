@@ -12,8 +12,8 @@ namespace LinkThemAll.Game.Board
 {
     public static class BoardConstants
     {
-        public const float TILE_WIDTH = 2.6f;
-        public const float TILE_HEIGHT = 2.6f;
+        public const float TILE_WIDTH = 2.56f;
+        public const float TILE_HEIGHT = 2.56f;
 
         public const int MIN_BOARD_WIDTH = 3;
         public const int MIN_BOARD_HEIGHT = 3;
@@ -29,19 +29,14 @@ namespace LinkThemAll.Game.Board
         [SerializeField] private InputController _inputController;
         [SerializeField] private LinkDrawer _linkDrawer;
         
-        private List<ETileType> _tiles;
         private BoardTile[] _boardTiles;
         public IReadOnlyList<BoardTile> BoardTiles => _boardTiles;
         
-        private Vector2Int _boardDimensions;
-        public Vector2Int Dimensions => _boardDimensions;
-        
         public bool Freezed { get; private set; }
-
-        public LinkController LinkController { get; private set; }
-        public bool NeedToShuffle { get; private set; }
+        public bool NeedToShuffle { get; private set; } public Vector2Int Dimensions { get; private set; }
 
         private TaskRunner _taskRunner;
+        private LinkController _linkController;
         
         public Action<int, ETileType> OnTilesLinked { get; set; }
         
@@ -49,23 +44,22 @@ namespace LinkThemAll.Game.Board
         {
             _taskRunner = new TaskRunner();
             _taskRunner.AddTask(new InitializeBoardTask(this, config));
-            _taskRunner.AddTask(new DrawBoardBackgroundTask(_boardDimensions, _bgTilePool));
-            _taskRunner.AddTask(new DrawBoardTilesTask(_tiles.AsReadOnly(), _boardTiles, _boardDimensions, _boardTilePool, _configs));
-            _taskRunner.AddTask(new AdjustCameraTask(_boardDimensions));
+            _taskRunner.AddTask(new DrawBoardBackgroundTask(Dimensions, _bgTilePool));
+            _taskRunner.AddTask(new DrawBoardTilesTask(_boardTiles, Dimensions, _boardTilePool, _configs));
+            _taskRunner.AddTask(new AdjustCameraTask(Dimensions));
             _taskRunner.AddTask(new ValidateBoardTask(this));
             _taskRunner.AddTask(new ShuffleBoardTask(this));
         }
         
-        public void InitializeBoard(Vector2Int dimensions, List<ETileType> tiles)
+        public void InitializeBoard(Vector2Int dimensions)
         {
-            _tiles = tiles;
-            _boardDimensions = dimensions;
-            _boardTiles = new BoardTile[_boardDimensions.x * _boardDimensions.y];
+            Dimensions = dimensions;
+            _boardTiles = new BoardTile[Dimensions.x * Dimensions.y];
             
-            LinkController = new LinkController(_inputController, this);
-            _linkDrawer.Initialize(LinkController);
+            _linkController = new LinkController(_inputController, this);
+            _linkDrawer.Initialize(_linkController);
             
-            LinkController.OnLinkCompleted += OnLinkCompleted;
+            _linkController.OnLinkCompleted += OnLinkCompleted;
         }
 
         public BoardTile GetTileByIndex(int index)
@@ -86,7 +80,7 @@ namespace LinkThemAll.Game.Board
                 return null;
             }
             
-            int index = BoardUtils.BoardPosToIndex(boardPos.x, boardPos.y, _boardDimensions);
+            int index = BoardUtils.BoardPosToIndex(boardPos.x, boardPos.y, Dimensions);
             return GetTileByIndex(index);
         }
 
@@ -97,33 +91,13 @@ namespace LinkThemAll.Game.Board
                 action?.Invoke();
             }));
         }
-        
-        private void OnLinkCompleted()
-        {
-            IReadOnlyList<BoardTile> linkedTiles = LinkController.Link;
-
-            _inputController.Lock(); 
-            _taskRunner.AddTask(new LinkTilesTask(this, linkedTiles, _boardTilePool));
-            _taskRunner.AddTask(new DropTilesTask(this, _boardTilePool, _configs));
-            _taskRunner.AddTask(new ValidateBoardTask(this));
-            _taskRunner.AddTask(new ShuffleBoardTask(this));
-            _taskRunner.AddTask(new ExecuteActionTask(() =>
-            {
-                if (Freezed)
-                {
-                    return;
-                }
-                
-                _inputController.Unlock();
-            }));
-        }
 
         public void TilesLinked(IReadOnlyList<BoardTile> linkedTiles)
         {
             foreach (BoardTile tile in linkedTiles)
             {
                 Vector2Int boardPos = tile.BoardPos;
-                int index = BoardUtils.BoardPosToIndex(boardPos.x, boardPos.y, _boardDimensions);
+                int index = BoardUtils.BoardPosToIndex(boardPos.x, boardPos.y, Dimensions);
 
                 _boardTiles[index] = null;    
             }
@@ -190,14 +164,34 @@ namespace LinkThemAll.Game.Board
             Freezed = true;
         }
 
+        private void OnLinkCompleted()
+        {
+            IReadOnlyList<BoardTile> linkedTiles = _linkController.Link;
+
+            _inputController.Lock(); 
+            _taskRunner.AddTask(new LinkTilesTask(this, linkedTiles, _boardTilePool));
+            _taskRunner.AddTask(new DropTilesTask(this, _boardTilePool, _configs));
+            _taskRunner.AddTask(new ValidateBoardTask(this));
+            _taskRunner.AddTask(new ShuffleBoardTask(this));
+            _taskRunner.AddTask(new ExecuteActionTask(() =>
+            {
+                if (Freezed)
+                {
+                    return;
+                }
+                
+                _inputController.Unlock();
+            }));
+        }
+
         private void OnDestroy()
         {
             _bgTilePool.Dispose();
             _boardTilePool.Dispose();
 
-            LinkController.OnLinkCompleted -= OnLinkCompleted;
-            LinkController.Dispose();
-            LinkController = null;
+            _linkController.OnLinkCompleted -= OnLinkCompleted;
+            _linkController.Dispose();
+            _linkController = null;
             
             _taskRunner.Terminate();
 

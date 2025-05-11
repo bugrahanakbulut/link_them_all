@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using LinkThemAll.Game.Board;
 using LinkThemAll.Game.Tile;
@@ -9,7 +8,6 @@ namespace LinkThemAll.Game.Tasks
 {
     public class DrawBoardTilesTask : IServiceTask
     {
-        private readonly IReadOnlyList<ETileType> _tiles;
         private Vector2Int _boardDimensions;
         private readonly BoardTilePool _boardTilePool;
         private readonly BoardTileConfigs _configs;
@@ -17,13 +15,11 @@ namespace LinkThemAll.Game.Tasks
         private BoardTile[] _boardTiles;
         
         public DrawBoardTilesTask(
-            IReadOnlyList<ETileType> tiles,
             BoardTile[] boardTiles,
             Vector2Int boardDimensions,
             BoardTilePool boardTilePool,
             BoardTileConfigs configs)
         {
-            _tiles = tiles;
             _boardDimensions = boardDimensions;
             _boardTilePool = boardTilePool;
             _configs = configs;
@@ -39,7 +35,7 @@ namespace LinkThemAll.Game.Tasks
                     int index = BoardUtils.BoardPosToIndex(x, y, _boardDimensions);
                     
                     BoardTile tile = _boardTilePool.GetTile();
-                    ETileType tileType = _tiles[index];
+                    ETileType tileType = (ETileType) Random.Range(0, (int)ETileType.Tile_Count);
                     
                     tile.Initialize(tileType, _configs.GetTileSprite(tileType), new Vector2Int(x, y));
                     tile.SetPosition(BoardUtils.BoardPosToWorldPos(x, y));

@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using LinkThemAll.Game.Board;
 using LinkThemAll.Game.Level;
-using LinkThemAll.Game.Tile;
 using LinkThemAll.Services.Task;
 using UnityEngine;
 
@@ -26,16 +24,7 @@ namespace LinkThemAll.Game.Tasks
                 Mathf.Max(configBoardSize.x, BoardConstants.MIN_BOARD_WIDTH), 
                 Mathf.Max(configBoardSize.y, BoardConstants.MIN_BOARD_HEIGHT));
             
-            int boardSize = boardDim.x * boardDim.y;
-
-            List<ETileType> tiles = new List<ETileType>(boardSize);
-
-            for (int i = 0; i < boardSize; ++i)
-            {
-                tiles.Add((ETileType)Random.Range(0, 3));
-            }
-            
-            _board.InitializeBoard(boardDim, tiles);
+            _board.InitializeBoard(boardDim);
 
             return UniTask.CompletedTask;
         }

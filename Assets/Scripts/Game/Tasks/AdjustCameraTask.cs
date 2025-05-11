@@ -11,7 +11,6 @@ namespace LinkThemAll.Game.Tasks
     {
         private readonly Vector2Int _boardDimensions;
 
-        private const float CameraSizeOffset = 1;
         private const float CameraVerticalPositionOffset = 2;
 
         public AdjustCameraTask(Vector2Int boardDimensions)
@@ -31,11 +30,11 @@ namespace LinkThemAll.Game.Tasks
 
             if (_boardDimensions.x > _boardDimensions.y)
             {
-                mainCam.orthographicSize = _boardDimensions.x * BoardConstants.TILE_WIDTH + CameraSizeOffset;
+                mainCam.orthographicSize = _boardDimensions.x * BoardConstants.TILE_WIDTH;
             }
             else
             {
-                mainCam.orthographicSize = _boardDimensions.y * BoardConstants.TILE_HEIGHT + CameraSizeOffset;
+                mainCam.orthographicSize = _boardDimensions.y * BoardConstants.TILE_HEIGHT;
             }
             
             return UniTask.CompletedTask;
