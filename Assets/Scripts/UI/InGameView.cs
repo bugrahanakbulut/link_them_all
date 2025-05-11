@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -14,14 +13,17 @@ namespace LinkThemAll.UI
         [SerializeField] private GameObject _gameObject;
         [SerializeField] private TextMeshProUGUI _levelText;
         [SerializeField] private TextMeshProUGUI _scoreText;
+        [SerializeField] private TextMeshProUGUI _moveText;
         
         [SerializeField] private CanvasGroup _canvasGroup;
 
         private readonly ILevelService _levelService = ServiceProvider.Get<ILevelService>();
         private readonly IScoreService _scoreService = ServiceProvider.Get<IScoreService>();
+        private readonly IMoveService _moveService = ServiceProvider.Get<IMoveService>();
         
         private const string LevelTemplate = "LEVEL {0}";
         private const string ScoreTemplate = "Score : {0} / {1}";
+        private const string MoveTemplate = "Move Count : \n {0}"; 
         
         public override UniTask Show()
         {
@@ -42,18 +44,26 @@ namespace LinkThemAll.UI
             _levelText.SetText(string.Format(LevelTemplate, curLevel));
             
             OnScoreUpdated();
-
+            OnMoveCountUpdated();
+            
             _scoreService.OnScoreUpdated += OnScoreUpdated;
+            _moveService.OnMoveCountUpdated += OnMoveCountUpdated;
         }
 
         private void OnDisable()
         {
             _scoreService.OnScoreUpdated -= OnScoreUpdated;
+            _moveService.OnMoveCountUpdated -= OnMoveCountUpdated;
+        }
+
+        private void OnMoveCountUpdated()
+        {
+            _moveText.SetText(string.Format(MoveTemplate, _moveService.RemainingMoveCount));
         }
 
         private void OnScoreUpdated()
         {
-            int levelScoreTarget = _levelService.GetLevelTarget();
+            int levelScoreTarget = _levelService.GetLevelTargetScore();
             _scoreText.SetText(string.Format(ScoreTemplate, _scoreService.CurrentScore, levelScoreTarget));
         }
     }

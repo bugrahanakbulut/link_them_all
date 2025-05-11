@@ -6,7 +6,6 @@ using LinkThemAll.Common.Tasks;
 using LinkThemAll.Services;
 using LinkThemAll.Services.Task;
 using LinkThemAll.UI;
-using UnityEngine.Serialization;
 
 namespace LinkThemAll.Game
 {
@@ -24,6 +23,7 @@ namespace LinkThemAll.Game
             _level = new LevelController(_levelConfigs);
             
             ServiceProvider.Add<ILevelService>(_level);
+            ServiceProvider.Add<IMoveService>(_level);
         }
         
         public async UniTaskVoid StartGame()

@@ -8,13 +8,24 @@ namespace LinkThemAll.Game.Level
 {
     public interface ILevelService : IService
     {
+        int RemainingMoveCount { get; }
+
         int GetCurrentLevel();
-        int GetLevelTarget();
+        int GetLevelTargetScore();
+        
+        Action OnMoveCountUpdated { get; set; }
+    }
+
+    public interface IMoveService : IService
+    {
+        int RemainingMoveCount { get; }
+        Action OnMoveCountUpdated { get; set; }
     }
     
-    public class LevelController : ILevelService, IDisposable
+    public class LevelController : ILevelService, IMoveService
     {
         public BoardController Board { get; private set; }
+        public int RemainingMoveCount { get; private set; }
         
         private int _currentLevel;
         private LevelConfig _currentLevelConfig;
@@ -24,6 +35,10 @@ namespace LinkThemAll.Game.Level
         
         private const string LEVEL_KEY = "player_cur_level";
         
+        public Action OnMoveCountUpdated { get; set; }
+        public Action OnLevelCompleted { get; set; }
+        public Action OnLevelFailed { get; set; }
+        
         public LevelController(LevelConfigs levelConfigs)
         {
             _levelConfigs = levelConfigs;
@@ -31,6 +46,7 @@ namespace LinkThemAll.Game.Level
             LoadPlayerLevel();
 
             _currentLevelConfig = GetCurrentLevelConfig();
+            RemainingMoveCount = _currentLevelConfig.TargetMove;
         }
         
         public void LoadCurrentLevel()
@@ -43,14 +59,14 @@ namespace LinkThemAll.Game.Level
         public void SetBoard(BoardController board)
         {
             Board = board;
-            Board.OnTileLinked += OnTileLinked;
+            Board.OnTilesLinked += OnTileLinked;
         }
         public int GetCurrentLevel()
         {
             return _currentLevel;
         }
 
-        public int GetLevelTarget()
+        public int GetLevelTargetScore()
         {
             return _currentLevelConfig.TargetScore;
         }
@@ -62,13 +78,34 @@ namespace LinkThemAll.Game.Level
                 return;
             }
 
-            Board.OnTileLinked -= OnTileLinked;
+            Board.OnTilesLinked -= OnTileLinked;
             Board = null;
         }
 
-        private void OnTileLinked(ETileType tileType)
+        private void OnTileLinked(int linkLength, ETileType tileType)
         {
-            _scoreService.IncreaseScore();
+            _scoreService.IncreaseScore(linkLength);
+
+            RemainingMoveCount--;
+            
+            OnMoveCountUpdated?.Invoke();
+
+            CheckLevelEnd();
+        }
+
+        private void CheckLevelEnd()
+        {
+            if (RemainingMoveCount == 0 && _scoreService.CurrentScore < GetLevelTargetScore())
+            {
+                OnLevelFailed?.Invoke();
+                return;
+            }
+
+            if (_scoreService.CurrentScore >= GetLevelTargetScore())
+            {
+                OnLevelCompleted?.Invoke();
+                return;
+            }
         }
 
         private LevelConfig GetCurrentLevelConfig()

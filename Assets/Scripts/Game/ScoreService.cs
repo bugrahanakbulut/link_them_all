@@ -7,7 +7,7 @@ namespace LinkThemAll.Game
     {
         int CurrentScore { get; }
         Action OnScoreUpdated { get; set; }
-        void IncreaseScore();
+        void IncreaseScore(int amount);
         void Reset();
     }
     
@@ -17,9 +17,9 @@ namespace LinkThemAll.Game
         
         public Action OnScoreUpdated { get; set; }
 
-        public void IncreaseScore()
+        public void IncreaseScore(int amount)
         {
-            CurrentScore++;
+            CurrentScore += amount;
             OnScoreUpdated?.Invoke();
         }
 

@@ -29,18 +29,26 @@ namespace LinkThemAll.Game.Tasks
         {
             Sequence sequence = DOTween.Sequence();
 
+            _boardController.TilesLinked(_linkedTiles);
+            
             foreach (BoardTile tile in _linkedTiles)
             {
-                sequence.Join(tile.FadeOut(TILE_FADE_OUT_DURATION).OnComplete(() =>
-                {
-                    _boardTilePool.Release(tile);
-                    _boardController.TileLinked(tile);
-                }));
+                sequence.Join(tile.FadeOut(TILE_FADE_OUT_DURATION));
             }
 
+            sequence.OnComplete(TilesLinked);
+            
             sequence.SetId(_boardController);
 
             await sequence;
+        }
+
+        private void TilesLinked()
+        {
+            foreach (BoardTile tile in _linkedTiles)
+            {
+                _boardTilePool.Release(tile);
+            }
         }
     }
 }

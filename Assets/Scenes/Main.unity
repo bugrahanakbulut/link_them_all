@@ -377,7 +377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _levelConfigs: {fileID: 11400000, guid: 3897078b92481a746bc2d3d82d52a78a, type: 2}
-  _uiManager: {fileID: 1029752169}
+  _viewManager: {fileID: 1029752169}
 --- !u!114 &1029752168
 MonoBehaviour:
   m_ObjectHideFlags: 0

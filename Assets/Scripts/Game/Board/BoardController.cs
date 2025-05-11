@@ -41,7 +41,7 @@ namespace LinkThemAll.Game.Board
 
         private TaskRunner _taskRunner;
         
-        public Action<ETileType> OnTileLinked { get; set; }
+        public Action<int, ETileType> OnTilesLinked { get; set; }
         
         public void Initialize(LevelConfig config)
         {
@@ -103,13 +103,17 @@ namespace LinkThemAll.Game.Board
             }));
         }
 
-        public void TileLinked(BoardTile tile)
+        public void TilesLinked(IReadOnlyList<BoardTile> linkedTiles)
         {
-            Vector2Int boardPos = tile.BoardPos;
-            int index = BoardUtils.BoardPosToIndex(boardPos.x, boardPos.y, _boardDimensions);
+            foreach (BoardTile tile in linkedTiles)
+            {
+                Vector2Int boardPos = tile.BoardPos;
+                int index = BoardUtils.BoardPosToIndex(boardPos.x, boardPos.y, _boardDimensions);
 
-            _boardTiles[index] = null;
-            OnTileLinked?.Invoke(tile.TileType);
+                _boardTiles[index] = null;    
+            }
+            
+            OnTilesLinked?.Invoke(linkedTiles.Count, linkedTiles[0].TileType);
         }
 
         public void SwapTiles(Vector2Int pos1, Vector2Int pos2)
