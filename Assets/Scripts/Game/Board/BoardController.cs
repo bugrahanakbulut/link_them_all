@@ -165,6 +165,16 @@ namespace LinkThemAll.Game.Board
             NeedToShuffle = reshuffle;
         }
 
+        public void Lock()
+        {
+            _inputController.Lock();
+        }
+
+        public void Unlock()
+        {
+            _inputController.Unlock();
+        }
+
         private void OnDestroy()
         {
             _bgTilePool.Dispose();
@@ -173,6 +183,8 @@ namespace LinkThemAll.Game.Board
             LinkController.OnLinkCompleted -= OnLinkCompleted;
             LinkController.Dispose();
             LinkController = null;
+            
+            _taskRunner.Terminate();
 
             DOTween.Kill(this);
         }

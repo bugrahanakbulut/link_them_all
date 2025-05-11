@@ -73,6 +73,10 @@ namespace LinkThemAll.Game.Level
 
         public void Dispose()
         {
+            OnLevelFailed = null;
+            OnLevelCompleted = null;
+            OnMoveCountUpdated = null;
+            
             if (Board == null)
             {
                 return;
@@ -122,6 +126,17 @@ namespace LinkThemAll.Game.Level
             }
 
             _currentLevel = PlayerPrefs.GetInt(LEVEL_KEY);
+        }
+
+        public void LockBoard()
+        {
+            Board.Lock();
+        }
+
+        public void Reset()
+        {
+            _scoreService.Reset();
+            RemainingMoveCount = 0;
         }
     }
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 27f2154916f44ac4397938831094ce8b
   m_currentHash:
     serializedVersion: 2
-    Hash: 05a567b71ef0e500f6bb15d8d269a26f
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -103,6 +103,7 @@ MonoBehaviour:
     - default
     - Board
     - InGameView
+    - LevelFailedView
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 127918330e761a74eab0a00cb992228f, type: 2}

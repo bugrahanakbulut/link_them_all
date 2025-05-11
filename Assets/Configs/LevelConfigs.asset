@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levels:
   - LevelId: 0
-    TargetMove: 5
+    TargetMove: 1
     TargetScore: 15
     BoardSize: {x: 8, y: 8}
   - LevelId: 1
