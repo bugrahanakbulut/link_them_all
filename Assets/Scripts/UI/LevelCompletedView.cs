@@ -37,6 +37,8 @@ namespace LinkThemAll.UI
 
         private void OnClickedContinue()
         {
+            _continueButton.interactable = false;
+            
             ServiceProvider.Get<IGameService>().StartGame();
         }
     }

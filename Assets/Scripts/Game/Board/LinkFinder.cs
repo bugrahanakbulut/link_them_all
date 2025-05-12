@@ -10,7 +10,7 @@ namespace LinkThemAll.Game.Board
     [BurstCompile(CompileSynchronously = true, DisableSafetyChecks = true)]
     public struct LinkFinder : IJob
     {
-        [ReadOnly][DeallocateOnJobCompletion] public NativeArray<ETileType> Tiles;
+        [ReadOnly] [DeallocateOnJobCompletion] public NativeArray<ETileType> Tiles;
         [ReadOnly] private Vector2Int _dimensions;
         [ReadOnly] private int _tileCount;
 

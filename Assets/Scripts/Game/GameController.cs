@@ -12,7 +12,7 @@ namespace LinkThemAll.Game
 {
     public interface IGameService : IService
     {
-        UniTaskVoid StartGame();
+        void StartGame();
     }
     
     public class GameController : MonoBehaviour, IGameService
@@ -47,7 +47,7 @@ namespace LinkThemAll.Game
             _level.OnLevelCompleted += OnLevelCompleted;
         }
 
-        public async UniTaskVoid StartGame()
+        public void StartGame()
         {
             _taskRunner.AddTask(new LoadGameTask(_level));
             _taskRunner.AddTask(new ExecuteActionTask(() =>

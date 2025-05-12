@@ -17,6 +17,7 @@ namespace LinkThemAll
         {
             Random.InitState(DateTime.Now.Second);
             Application.targetFrameRate = 60;
+            Input.multiTouchEnabled = false;
             
             ServiceProvider.Add<ICameraService>(_cameraService);
             ServiceProvider.Add<IScoreService>(new ScoreService());

@@ -26,7 +26,6 @@ namespace LinkThemAll.Game.Tasks
             Vector3 center = (leftBottom + rightTop) * 0.5f;
 
             Camera mainCam = ServiceProvider.Get<ICameraService>().MainCamera;
-            Vector3 camPos = new Vector3(center.x, center.y, -10);
 
             float screenAspectRation = (float)Screen.height / Screen.width;
             
@@ -38,7 +37,7 @@ namespace LinkThemAll.Game.Tasks
             
             mainCam.orthographicSize = Mathf.Max(sizeForHeight, sizeForWidth);
 
-            mainCam.transform.position = camPos;
+            mainCam.transform.position = new Vector3(center.x, center.y, -10);;
             
             return UniTask.CompletedTask;
         }

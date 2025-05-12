@@ -37,6 +37,8 @@ namespace LinkThemAll.UI
 
         private void OnClickedTryAgain()
         {
+            _tryAgainButton.interactable = false;
+            
             ServiceProvider.Get<IGameService>().StartGame();
         }
     }

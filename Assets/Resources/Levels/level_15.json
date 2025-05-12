@@ -3,7 +3,7 @@
     "TargetMove": 33,
     "TargetScore": 114,
     "BoardSize": {
-        "x": 8,
-        "y": 8
+        "x": 15,
+        "y": 15
     }
 }
