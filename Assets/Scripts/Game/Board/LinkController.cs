@@ -15,6 +15,10 @@ namespace LinkThemAll.Game.Board
         
         private readonly List<BoardTile> _link = new List<BoardTile>();
         public IReadOnlyList<BoardTile> Link => _link.AsReadOnly();
+
+        private readonly Vector2Int[] _directions;
+        private int _directionDivider;
+        private int _directionAxisShift;
         
         public Action OnLinkStarted { get; set; }
         public Action OnLinkUpdated { get; set; }
@@ -23,6 +27,14 @@ namespace LinkThemAll.Game.Board
 
         public LinkController(InputController inputController, BoardController boardController)
         {
+            _directions = new[]
+            {
+                Vector2Int.right, Vector2Int.up, Vector2Int.left, Vector2Int.down,
+            };
+            
+            _directionDivider = 360 / _directions.Length;
+            _directionAxisShift = (int)(_directionDivider * 0.5f);
+            
             _inputController = inputController;
             _boardController = boardController;
             _mainCamera = ServiceProvider.Get<ICameraService>().MainCamera;
@@ -48,7 +60,6 @@ namespace LinkThemAll.Game.Board
             if (inputBoardPos.x < 0 || inputBoardPos.x >= _boardController.Dimensions.x ||
                 inputBoardPos.y < 0 || inputBoardPos.y >= _boardController.Dimensions.y)
             {
-                Debug.Log("[InputController]::Not able to select tile!");
                 return;
             }
             
@@ -97,7 +108,7 @@ namespace LinkThemAll.Game.Board
             float angle = Mathf.Atan2(deltaBoardPos.y, deltaBoardPos.x) * Mathf.Rad2Deg;
 
             Vector2Int targetBoardPos = lastTileBoardPos + GetDirectionByAngle(angle);
-
+            
             BoardTile candidateTile = _boardController.GetTileByBoardPos(targetBoardPos);
             
             if (candidateTile == null)
@@ -126,27 +137,14 @@ namespace LinkThemAll.Game.Board
         
         private Vector2Int GetDirectionByAngle(float angle)
         {
+            angle += _directionAxisShift;
+
             if (angle < 0)
             {
                 angle += 360;
             }
 
-            if (angle > 45 && angle < 135)
-            {
-                return Vector2Int.up;
-            }
-
-            if (angle > 135 && angle < 235)
-            {
-                return Vector2Int.left;
-            }
-
-            if (angle > 235 && angle < 315)
-            {
-                return Vector2Int.down;
-            }
-
-            return Vector2Int.right;
+            return _directions[((int)angle / _directionDivider)];
         }
     }
 }
