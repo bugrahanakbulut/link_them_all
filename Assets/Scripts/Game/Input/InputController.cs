@@ -11,6 +11,10 @@ namespace LinkThemAll.Game
         public Action OnFingerUp { get; set; }
         public Action<Vector3> OnInputMove { get; set; }
 
+        private Vector3 _fingerPos;
+
+        private const float MIN_INPUT_MAGNITUTDE = 5f; 
+
         private void Update()
         {
             if (Input.GetMouseButtonDown(0))
@@ -38,7 +42,9 @@ namespace LinkThemAll.Game
                 return;
             }
             
-            OnFingerDown?.Invoke(Input.mousePosition);
+            _fingerPos = Input.mousePosition;
+            
+            OnFingerDown?.Invoke(_fingerPos);
         }
 
         private void FingerUp()
@@ -57,6 +63,15 @@ namespace LinkThemAll.Game
             {
                 return;
             }
+
+            Vector3 deltaInput = Input.mousePosition - _fingerPos;
+
+            if (deltaInput.magnitude < MIN_INPUT_MAGNITUTDE)
+            {
+                return;
+            }
+            
+            _fingerPos = Input.mousePosition;
             
             OnInputMove?.Invoke(Input.mousePosition);
         }

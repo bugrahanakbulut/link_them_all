@@ -169,11 +169,18 @@ namespace LinkThemAll.Game.Board
             IReadOnlyList<BoardTile> linkedTiles = _linkController.Link;
 
             _inputController.Lock(); 
-            _taskRunner.AddTask(new LinkTilesTask(this, linkedTiles, _boardTilePool));
-            _taskRunner.AddTask(new DropTilesTask(this, _boardTilePool, _configs));
-            _taskRunner.AddTask(new ValidateBoardTask(this));
-            _taskRunner.AddTask(new ShuffleBoardTask(this));
-            _taskRunner.AddTask(new ExecuteActionTask(() =>
+            
+            _taskRunner.AddTasks(
+                new LinkTilesTask(this, linkedTiles, _boardTilePool),
+                new DropTilesTask(this, _boardTilePool, _configs),
+                new ValidateBoardTask(this),
+                new ShuffleBoardTask(this),
+                UnlockBoard());
+        }
+
+        private IServiceTask UnlockBoard()
+        {
+            return new ExecuteActionTask(() =>
             {
                 if (Freezed)
                 {
@@ -181,7 +188,7 @@ namespace LinkThemAll.Game.Board
                 }
                 
                 _inputController.Unlock();
-            }));
+            });
         }
 
         private void OnDestroy()

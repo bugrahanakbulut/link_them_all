@@ -35,6 +35,19 @@ namespace LinkThemAll.Services.Task
             }
         }
 
+        public void AddTasks(params IServiceTask[] tasks)
+        {
+            foreach (IServiceTask task in tasks)
+            {
+                _taskQueue.Enqueue(task);
+            }
+
+            if (!Running)
+            {
+                StartExecution();
+            }
+        }
+
         public void Pause()
         {
             _paused = true;

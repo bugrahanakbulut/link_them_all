@@ -27,6 +27,7 @@ namespace LinkThemAll.UI
         private const string LevelTemplate = "LEVEL {0}";
         private const string ScoreTemplate = "Score : {0} / {1}";
         private const string MoveTemplate = "Move Count : \n {0}"; 
+        private const string FpsTrackerTemplate = "FPS : {0:###}";
         
         public override UniTask Show()
         {
@@ -42,7 +43,7 @@ namespace LinkThemAll.UI
 
         private void Update()
         {
-            _fpstracker.SetText($"{1 / Time.deltaTime}");
+            _fpstracker.SetText(string.Format(FpsTrackerTemplate, 1f / Time.deltaTime));
         }
 
         private void OnEnable()

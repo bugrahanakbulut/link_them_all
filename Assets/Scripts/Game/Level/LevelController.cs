@@ -126,7 +126,6 @@ namespace LinkThemAll.Game.Level
                 {
                     OnLevelCompleted?.Invoke();
                 });
-                return;
             }
         }
 

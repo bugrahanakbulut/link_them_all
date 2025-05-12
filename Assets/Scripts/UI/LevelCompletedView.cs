@@ -12,11 +12,16 @@ namespace LinkThemAll.UI
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private GameObject _gameObject;
         [SerializeField] private Button _continueButton;
-
-        public override UniTask Show()
+        
+        public override async UniTask Show()
         {
+            _continueButton.interactable = false;
+            
             _gameObject.SetActive(true);
-            return _canvasGroup.DOFade(1, 0.5f).From(0).SetId(this).ToUniTask();
+            
+            await _canvasGroup.DOFade(1, 0.5f).From(0).SetId(this).ToUniTask();
+            
+            _continueButton.interactable = true;
         }
 
         public override async UniTask Hide()
